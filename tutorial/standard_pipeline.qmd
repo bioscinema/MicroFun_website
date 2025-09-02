@@ -1,0 +1,109 @@
+---
+title: "Pipeline for standard output of PICRUST2"
+format: 
+  html:
+    code-fold: FALSE
+    code-tools: FALSE
+editor: visual
+---
+
+## 1. Generate PICRUSt2 **standard** (community-level) output
+
+PICRUSt2 takes **representative sequences** (FASTA) and a **feature table** (BIOM/TSV) as input and produces predicted functional profiles at the **community level** (unstratified).  
+If you need installation instructions, see the official docs: <https://huttenhower.sph.harvard.edu/picrust/>.
+
+### 1.1 Inputs
+
+You should have:
+- `dna-sequences.fasta` — representative sequences (ASVs/OTUs)
+- `feature-table.biom` — counts table (features × samples)
+
+``` bash
+picrust2_pipeline.py \
+  -s dna-sequences.fasta \
+  -i feature-table.biom \
+  -o picrust2_out \
+  -p 8
+```
+Key outputs you will use
+
+- picrust2_out/KO_metagenome_out/pred_metagenome_unstrat.tsv
+
+- picrust2_out/EC_metagenome_out/pred_metagenome_unstrat.tsv
+
+- picrust2_out/pathways_out/path_abun_unstrat.tsv
+
+Each file is a feature × sample matrix (first column = feature ID, remaining columns = samples).
+
+
+## 2. Downstream analysis and visualization for standard PICRUST2 output with MicroFun
+
+### 2.1 Convert KO abundance table to KEGG pathway dabundance
+
+```r
+# Assume that the KO abundance table is stored in a file named "ko_abundance.tsv"
+ko_abundance_file <- "ko_abundance.tsv"
+
+# Convert KO abundance to KEGG pathway abundance
+kegg_abundance <- ko2kegg_abundance(file = ko_abundance_file)
+
+# Alternatively, if the KO abundance data is already loaded as a data frame named "ko_abundance"
+data("ko_abundance")
+kegg_abundance <- ko2kegg_abundance(data = ko_abundance)
+```
+
+### 2.2 Differential analysis for functional abundance table using different methods
+
+Many different methods can be applied in ggpircust2 and MicroFun R packages including [ALDEx2](https://www.bioconductor.org/packages/release/bioc/html/ALDEx2.html), [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html), [Maaslin2](https://www.bioconductor.org/packages/release/bioc/html/Maaslin2.html), [LinDA](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-022-02655-5), [edgeR](https://bioconductor.org/packages/release/bioc/html/edgeR.html), [limma voom](https://ucdavis-bioinformatics-training.github.io/2018-June-RNA-Seq-Workshop/thursday/DE.html), [metagenomeSeq](https://www.bioconductor.org/packages/release/bioc/html/metagenomeSeq.html#:~:text=metagenomeSeq%20is%20designed%20to%20address,the%20testing%20of%20feature%20correlations.), [Lefser](https://bioconductor.org/packages/release/bioc/html/lefser.html).
+
+```r
+# Please change group to "your_group_column" if you are not using example dataset
+daa_results_df <- pathway_daa(abundance = kegg_abundance, metadata = metadata, group = "Environment", daa_method = "LinDA")
+
+# Generic KO to KEGG pathway annotation (not specific to any organism)
+daa_annotated_results_df <- pathway_annotation(pathway = "KO", daa_results_df = daa_results_df, ko_to_kegg = TRUE)
+```
+
+### 2.3 Visualization for differential analysis
+
+#### 2.3.1 pathway_errorbar():
+
+```r
+kegg_abundance <- ko2kegg_abundance(data = ko_abundance) # Or use data(kegg_abundance)
+# Please change group to "your_group_column" if you are not using example dataset
+daa_results_df <- pathway_daa(kegg_abundance, metadata = metadata, group = "Environment", daa_method = "LinDA")
+daa_annotated_results_df <- pathway_annotation(pathway = "KO", daa_results_df = daa_results_df, ko_to_kegg = TRUE)
+# Please change Group to metadata$your_group_column if you are not using example dataset
+p <- pathway_errorbar(abundance = kegg_abundance,
+           daa_results_df = daa_annotated_results_df,
+           Group = metadata$Environment,
+           ko_to_kegg = TRUE,
+           p_values_threshold = 0.05,
+           order = "pathway_class",
+           select = NULL,
+           p_value_bar = TRUE,
+           colors = NULL,
+           x_lab = "pathway_name")
+```
+
+#### 2.3.2 pathway_heatmap()
+
+The `pathway_heatmap()` function visualizes the relative abundance of pathways in different samples with advanced features includinf hierarchical clustering, faceted display, and customizable aesthetics.
+
+```r
+# Create example functional pathway abundance data
+abundance_example <- matrix(rnorm(30), nrow = 3, ncol = 10)
+colnames(abundance_example) <- paste0("Sample", 1:10)
+rownames(abundance_example) <- c("PathwayA", "PathwayB", "PathwayC")
+
+# Create example metadata
+# Please change your sample id's column name to sample_name
+metadata_example <- data.frame(
+  sample_name = colnames(abundance_example),
+  group = factor(rep(c("Control", "Treatment"), each = 5)),
+  batch = factor(rep(c("Batch1", "Batch2"), times = 5))
+)
+
+# Create a basic heatmap
+pathway_heatmap(abundance_example, metadata_example, "group")
+```

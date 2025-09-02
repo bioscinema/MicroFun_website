@@ -1,0 +1,51 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "MicroFun"
+  navbar:
+    left:
+      - text: Pipeline for PICRUSt2 standard output
+        href: tutorial/standard_pipeline.qmd
+      - text: Pipeline for PICRUSt2 stratified output
+        href: tutorial/stratified_pipeline.qmd
+      - text: A demonstration study
+        href: tutorial/Real_data.qmd
+    right:
+      - icon: github
+        href: https://github.com/bioscinema/MicroFun
+  # sidebar:
+  #   style: "docked"
+  #   search: true
+  #   contents: []
+  # sidebar:
+  #   - id: paper
+  #     collapse-level: 2
+  #     contents:
+  #     - paper_code/simulation.qmd
+  #     - paper_code/Real_data.qmd
+  # page-navigation: FALSE
+  # sidebar:
+  #   # 1) a “main” sidebar (here empty, so it effectively hides)
+  #   - id: main
+  #     collapse-level: 2
+  #     contents: []
+  # 
+  #   # 2) your Paper sidebar, only shown when you request `sidebar: paper`
+  #   - id: paper
+  #     collapse-level: 2
+  #     contents:
+  #       - paper_code/simulation.qmd
+  #       - paper_code/Real_data.qmd
+  # page-navigation: false
+  
+
+format:
+  html:
+    theme: yeti
+    css: styles.css
+    toc: true
+
+editor: visual
+
