@@ -201,7 +201,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>p1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="tumor_sankey2.jpg" class="img-fluid figure-img"></p>
+<p><img src="sankey_tumor.jpg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 <ul>
@@ -214,11 +214,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>We also provide option <code>taxa_list</code> if you want to plot sankey diagram for some specific taxa</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## If you are interested specifically in g_Proteiniphilum and g_Leuconostoc</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>taxon_list <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Proteiniphilum"</span>, <span class="st">"Leuconostoc"</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">sankey_diagram</span>(result, <span class="at">taxa_list =</span> taxon_list)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">tax2fun_sankey</span>(result, <span class="at">taxa_list =</span> taxon_list)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>p1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="tumor_sankey_small.jpg" class="img-fluid figure-img"></p>
+<p><img src="sankey_tumor.jpg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </section>
@@ -259,7 +259,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">60</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="tumor_function_box.png" class="img-fluid figure-img"></p>
+<p><img src="function_Faecalibacterium.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </section>
@@ -278,14 +278,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>p3[[<span class="st">"Streptococcus]]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="logfc_plot.png" class="img-fluid figure-img"></p>
+<p><img src="fc_Faecalibacterium.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </section>
 <section id="dendrogram-for-connection-bewteen-taxa-and-function" class="level3">
 <h3 class="anchored" data-anchor-id="dendrogram-for-connection-bewteen-taxa-and-function">2.4 Dendrogram for connection bewteen taxa and function</h3>
 <p>We can also use a dendrogram plot to connect some genus we are insterested with top functions with highest log fold change.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">plot_genus_function_dendrogram</span>(<span class="at">pathway_sdaa_result =</span> result)</span>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">plot_function_dendrogram</span>(<span class="at">pathway_sdaa_result =</span> result)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>p4<span class="sc">$</span>plot</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>

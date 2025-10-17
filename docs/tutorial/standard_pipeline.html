@@ -157,6 +157,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#convert-ko-abundance-table-to-kegg-pathway-dabundance" id="toc-convert-ko-abundance-table-to-kegg-pathway-dabundance" class="nav-link" data-scroll-target="#convert-ko-abundance-table-to-kegg-pathway-dabundance">2.1 Convert KO abundance table to KEGG pathway dabundance</a></li>
   <li><a href="#differential-analysis-for-functional-abundance-table-using-different-methods" id="toc-differential-analysis-for-functional-abundance-table-using-different-methods" class="nav-link" data-scroll-target="#differential-analysis-for-functional-abundance-table-using-different-methods">2.2 Differential analysis for functional abundance table using different methods</a></li>
+  <li><a href="#new-parameter-confounder" id="toc-new-parameter-confounder" class="nav-link" data-scroll-target="#new-parameter-confounder">New Parameter: <code>confounder</code></a></li>
   <li><a href="#visualization-for-differential-analysis" id="toc-visualization-for-differential-analysis" class="nav-link" data-scroll-target="#visualization-for-differential-analysis">2.3 Visualization for differential analysis</a></li>
   </ul></li>
   </ul>
@@ -226,44 +227,62 @@ If you need installation instructions, see the official docs: <a href="https://h
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Generic KO to KEGG pathway annotation (not specific to any organism)</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>daa_annotated_results_df <span class="ot">&lt;-</span> <span class="fu">pathway_annotation</span>(<span class="at">pathway =</span> <span class="st">"KO"</span>, <span class="at">daa_results_df =</span> daa_results_df, <span class="at">ko_to_kegg =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
+<section id="new-parameter-confounder" class="level3">
+<h3 class="anchored" data-anchor-id="new-parameter-confounder">New Parameter: <code>confounder</code></h3>
+<p>We have added a new parameter, <strong><code>confounder</code></strong>, to the <code>pathway_daa()</code> function.<br>
+This allows you to adjust for potential confounding variables when running differential abundance analysis with the <strong>Maaslin2</strong> method.</p>
+<ul>
+<li>By default, <code>confounder = NULL</code> (no adjustment).<br>
+</li>
+<li>To include one or more confounders, provide them as a character vector of column names from your metadata.</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: adjusting for the effect of "Height" as a confounder</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>daa_results_df <span class="ot">&lt;-</span> <span class="fu">pathway_daa</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">abundance   =</span> kegg_abundance,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">metadata    =</span> metadata,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">group       =</span> <span class="st">"Environment"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">confounder  =</span> <span class="fu">c</span>(<span class="st">"Height"</span>),</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">daa_method  =</span> <span class="st">"Maaslin2"</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
 <section id="visualization-for-differential-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="visualization-for-differential-analysis">2.3 Visualization for differential analysis</h3>
 <section id="pathway_errorbar" class="level4">
 <h4 class="anchored" data-anchor-id="pathway_errorbar">2.3.1 pathway_errorbar():</h4>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>kegg_abundance <span class="ot">&lt;-</span> <span class="fu">ko2kegg_abundance</span>(<span class="at">data =</span> ko_abundance) <span class="co"># Or use data(kegg_abundance)</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Please change group to "your_group_column" if you are not using example dataset</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>daa_results_df <span class="ot">&lt;-</span> <span class="fu">pathway_daa</span>(kegg_abundance, <span class="at">metadata =</span> metadata, <span class="at">group =</span> <span class="st">"Environment"</span>, <span class="at">daa_method =</span> <span class="st">"LinDA"</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>daa_annotated_results_df <span class="ot">&lt;-</span> <span class="fu">pathway_annotation</span>(<span class="at">pathway =</span> <span class="st">"KO"</span>, <span class="at">daa_results_df =</span> daa_results_df, <span class="at">ko_to_kegg =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Please change Group to metadata$your_group_column if you are not using example dataset</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">pathway_errorbar</span>(<span class="at">abundance =</span> kegg_abundance,</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">daa_results_df =</span> daa_annotated_results_df,</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">Group =</span> metadata<span class="sc">$</span>Environment,</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">ko_to_kegg =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">p_values_threshold =</span> <span class="fl">0.05</span>,</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">order =</span> <span class="st">"pathway_class"</span>,</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">select =</span> <span class="cn">NULL</span>,</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">p_value_bar =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">colors =</span> <span class="cn">NULL</span>,</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>           <span class="at">x_lab =</span> <span class="st">"pathway_name"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>kegg_abundance <span class="ot">&lt;-</span> <span class="fu">ko2kegg_abundance</span>(<span class="at">data =</span> ko_abundance) <span class="co"># Or use data(kegg_abundance)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Please change group to "your_group_column" if you are not using example dataset</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>daa_results_df <span class="ot">&lt;-</span> <span class="fu">pathway_daa</span>(kegg_abundance, <span class="at">metadata =</span> metadata, <span class="at">group =</span> <span class="st">"Environment"</span>, <span class="at">daa_method =</span> <span class="st">"LinDA"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>daa_annotated_results_df <span class="ot">&lt;-</span> <span class="fu">pathway_annotation</span>(<span class="at">pathway =</span> <span class="st">"KO"</span>, <span class="at">daa_results_df =</span> daa_results_df, <span class="at">ko_to_kegg =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Please change Group to metadata$your_group_column if you are not using example dataset</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">pathway_errorbar</span>(<span class="at">abundance =</span> kegg_abundance,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">daa_results_df =</span> daa_annotated_results_df,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">Group =</span> metadata<span class="sc">$</span>Environment,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">ko_to_kegg =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">p_values_threshold =</span> <span class="fl">0.05</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">order =</span> <span class="st">"pathway_class"</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">select =</span> <span class="cn">NULL</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">p_value_bar =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">colors =</span> <span class="cn">NULL</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>           <span class="at">x_lab =</span> <span class="st">"pathway_name"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="pathway_heatmap" class="level4">
 <h4 class="anchored" data-anchor-id="pathway_heatmap">2.3.2 pathway_heatmap()</h4>
 <p>The <code>pathway_heatmap()</code> function visualizes the relative abundance of pathways in different samples with advanced features includinf hierarchical clustering, faceted display, and customizable aesthetics.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create example functional pathway abundance data</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>abundance_example <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">30</span>), <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">ncol =</span> <span class="dv">10</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(abundance_example) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"Sample"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(abundance_example) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"PathwayA"</span>, <span class="st">"PathwayB"</span>, <span class="st">"PathwayC"</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create example metadata</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Please change your sample id's column name to sample_name</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>metadata_example <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">sample_name =</span> <span class="fu">colnames</span>(abundance_example),</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Control"</span>, <span class="st">"Treatment"</span>), <span class="at">each =</span> <span class="dv">5</span>)),</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Batch1"</span>, <span class="st">"Batch2"</span>), <span class="at">times =</span> <span class="dv">5</span>))</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a basic heatmap</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="fu">pathway_heatmap</span>(abundance_example, metadata_example, <span class="st">"group"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create example functional pathway abundance data</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>abundance_example <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">30</span>), <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">ncol =</span> <span class="dv">10</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(abundance_example) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"Sample"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(abundance_example) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"PathwayA"</span>, <span class="st">"PathwayB"</span>, <span class="st">"PathwayC"</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create example metadata</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Please change your sample id's column name to sample_name</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>metadata_example <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">sample_name =</span> <span class="fu">colnames</span>(abundance_example),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">group =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Control"</span>, <span class="st">"Treatment"</span>), <span class="at">each =</span> <span class="dv">5</span>)),</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Batch1"</span>, <span class="st">"Batch2"</span>), <span class="at">times =</span> <span class="dv">5</span>))</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a basic heatmap</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="fu">pathway_heatmap</span>(abundance_example, metadata_example, <span class="st">"group"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>

@@ -34,7 +34,7 @@ p1 <- sankey_diagram(result)
 p1
 ```
 
-![](tumor_sankey2.jpg){fig-align="center"}
+![](sankey_tumor.jpg){fig-align="center"}
 
 - Left nodes = genera you tested.
 
@@ -51,11 +51,11 @@ We also provide option `taxa_list` if you want to plot sankey diagram for some s
 ```r
 ## If you are interested specifically in g_Proteiniphilum and g_Leuconostoc
 taxon_list <- c("Proteiniphilum", "Leuconostoc")
-p1 <- sankey_diagram(result, taxa_list = taxon_list)
+p1 <- tax2fun_sankey(result, taxa_list = taxon_list)
 p1
 ```
 
-![](tumor_sankey_small.jpg){fig-align="center"}
+![](sankey_tumor.jpg){fig-align="center"}
 
 ### 2.2 Box plot to check real differential between groups
 
@@ -97,7 +97,7 @@ ggsave(filename = "tumor_function_box.png", bg="white", width = 10, height = 8, 
   theme(plot.margin = margin(10, 10, 10, 60))
 ```
 
-![](tumor_function_box.png){fig-align="center"}
+![](function_Faecalibacterium.png){fig-align="center"}
 
 ### 2.3 Bar plot to illustrate log fold change of top significant functions for each taxa
 
@@ -116,14 +116,14 @@ View(p3)
 p3[["Streptococcus]]
 ```
 
-![](logfc_plot.png){fig-align="center"}
+![](fc_Faecalibacterium.png){fig-align="center"}
 
 ### 2.4 Dendrogram for connection bewteen taxa and function
 
 We can also use a dendrogram plot to connect some genus we are insterested with top functions with highest log fold change.
 
 ```r
-p4 <- plot_genus_function_dendrogram(pathway_sdaa_result = result)
+p4 <- plot_function_dendrogram(pathway_sdaa_result = result)
 
 p4$plot
 

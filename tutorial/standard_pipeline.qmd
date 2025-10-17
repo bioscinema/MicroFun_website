@@ -64,6 +64,25 @@ daa_results_df <- pathway_daa(abundance = kegg_abundance, metadata = metadata, g
 daa_annotated_results_df <- pathway_annotation(pathway = "KO", daa_results_df = daa_results_df, ko_to_kegg = TRUE)
 ```
 
+### New Parameter: `confounder`
+
+We have added a new parameter, **`confounder`**, to the `pathway_daa()` function.  
+This allows you to adjust for potential confounding variables when running differential abundance analysis with the **Maaslin2** method.  
+
+- By default, `confounder = NULL` (no adjustment).  
+- To include one or more confounders, provide them as a character vector of column names from your metadata.  
+
+```r
+# Example: adjusting for the effect of "Height" as a confounder
+daa_results_df <- pathway_daa(
+  abundance   = kegg_abundance,
+  metadata    = metadata,
+  group       = "Environment",
+  confounder  = c("Height"),
+  daa_method  = "Maaslin2"
+)
+```
+
 ### 2.3 Visualization for differential analysis
 
 #### 2.3.1 pathway_errorbar():

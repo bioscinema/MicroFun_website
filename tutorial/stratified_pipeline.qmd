@@ -41,7 +41,7 @@ result <- pathway_sdaa(stratified_path = "picrust2_out/KO_metagenome_out/pred_me
 #### 2.2.1 sankey_diagram()
 
 ```r
-p1 <- sankey_diagram(result)
+p1 <- tax2fun_snakey(result)
 ```
 
 #### 2.2.2 function_box()
@@ -65,7 +65,7 @@ p3[[1]]
 #### 2.2.4 plot_genus_function_dendrogram()
 
 ```r
-p4 <- plot_genus_function_dendrogram(pathway_sdaa_result = result)
+p4 <- tax2fun_dendrogram(pathway_sdaa_result = result)
 
 p4$plot
 ```
