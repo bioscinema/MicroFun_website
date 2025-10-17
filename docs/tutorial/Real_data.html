@@ -150,12 +150,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#data-introduction-and-differential-analysis" id="toc-data-introduction-and-differential-analysis" class="nav-link active" data-scroll-target="#data-introduction-and-differential-analysis">1. Data introduction and differential analysis:</a></li>
-  <li><a href="#global-analysis" id="toc-global-analysis" class="nav-link" data-scroll-target="#global-analysis">2. Global analysis</a>
+  <li><a href="#global-analysis-functions-to-taxa" id="toc-global-analysis-functions-to-taxa" class="nav-link" data-scroll-target="#global-analysis-functions-to-taxa">2. Global analysis (Functions to taxa)</a>
   <ul class="collapse">
   <li><a href="#sankey-diagram" id="toc-sankey-diagram" class="nav-link" data-scroll-target="#sankey-diagram">2.1 Sankey Diagram</a></li>
   <li><a href="#box-plot-to-check-real-differential-between-groups" id="toc-box-plot-to-check-real-differential-between-groups" class="nav-link" data-scroll-target="#box-plot-to-check-real-differential-between-groups">2.2 Box plot to check real differential between groups</a></li>
   <li><a href="#bar-plot-to-illustrate-log-fold-change-of-top-significant-functions-for-each-taxa" id="toc-bar-plot-to-illustrate-log-fold-change-of-top-significant-functions-for-each-taxa" class="nav-link" data-scroll-target="#bar-plot-to-illustrate-log-fold-change-of-top-significant-functions-for-each-taxa">2.3 Bar plot to illustrate log fold change of top significant functions for each taxa</a></li>
   <li><a href="#dendrogram-for-connection-bewteen-taxa-and-function" id="toc-dendrogram-for-connection-bewteen-taxa-and-function" class="nav-link" data-scroll-target="#dendrogram-for-connection-bewteen-taxa-and-function">2.4 Dendrogram for connection bewteen taxa and function</a></li>
+  <li><a href="#global-analysis-taxa-to-functions" id="toc-global-analysis-taxa-to-functions" class="nav-link" data-scroll-target="#global-analysis-taxa-to-functions">Global Analysis (Taxa to functions)</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -190,18 +191,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>ps1 <span class="ot">&lt;-</span> <span class="fu">subset_samples</span>(ps, Cohort<span class="sc">==</span><span class="st">"MDA"</span>)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="do">## Differential analysis (pred_metagenome_contrib.tsv.gz is your original stratified output, ps1 is your phyloseq object, group is the response variable, the default taxonomy level is genus)</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">pathway_sdaa_v2</span>(<span class="at">stratified_path =</span> <span class="st">"picrust2_out/KO_metagenome_out/pred_metagenome_contrib.tsv.gz"</span>, <span class="at">physeq =</span> ps1, <span class="at">group =</span> <span class="st">"group"</span>, <span class="at">direction =</span> <span class="st">"taxa"</span>, <span class="at">p.adjust.method =</span> <span class="st">"BH"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">pathway_sdaa_v2</span>(<span class="at">stratified_path =</span> <span class="st">"picrust2_out/KO_metagenome_out/pred_metagenome_contrib.tsv.gz"</span>, <span class="at">physeq =</span> ps1, <span class="at">group =</span> <span class="st">"group"</span>, <span class="at">direction =</span> <span class="st">"taxa"</span>, <span class="at">p.adjust.method =</span> <span class="st">"BH"</span>, <span class="at">taxon_level=</span><span class="st">"Class"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="global-analysis" class="level2">
-<h2 class="anchored" data-anchor-id="global-analysis">2. Global analysis</h2>
+<section id="global-analysis-functions-to-taxa" class="level2">
+<h2 class="anchored" data-anchor-id="global-analysis-functions-to-taxa">2. Global analysis (Functions to taxa)</h2>
 <section id="sankey-diagram" class="level3">
 <h3 class="anchored" data-anchor-id="sankey-diagram">2.1 Sankey Diagram</h3>
-<p><code>Sankey_diagram()</code> visualizes flows from taxa to functions, with link width proportional to |logFC| and link color indicating differential direction (up/down).</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">sankey_diagram</span>(result)</span>
+<p><code>Sankey_diagram()</code> visualizes flows from taxa to functions, with link width proportional to |logFC| and link color indicating differential direction (up/down). In the Sankey diagram, function IDs are grouped into higher-level pathway descriptions using the internal reference tables provided by the MicroFun R package.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> p1 <span class="ot">&lt;-</span> <span class="fu">tax2fun_sankey</span>(result1, <span class="at">node_neutral =</span> <span class="st">"green"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>p1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="sankey_tumor.jpg" class="img-fluid figure-img"></p>
+<p><img src="class_sankey.jpg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 <ul>
@@ -212,20 +213,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>From the plot, (i) the dominant KEGG level-1 categories by total aggregated flow—often led by Metabolism—and give each category’s percent share (especially useful if link colors encode groups); (ii) the top contributing genera per category (e.g., the top 3–5 by aggregated weight).</p>
 <p>We also provide option <code>taxa_list</code> if you want to plot sankey diagram for some specific taxa</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## If you are interested specifically in g_Proteiniphilum and g_Leuconostoc</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>taxon_list <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Proteiniphilum"</span>, <span class="st">"Leuconostoc"</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">tax2fun_sankey</span>(result, <span class="at">taxa_list =</span> taxon_list)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>p1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## If you are interested specifically in c__Bacilli, c__Cyanobacteriia, c__Blastocatellia</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">tax2fun_sankey</span>(result1, <span class="at">node_neutral =</span> <span class="st">"green"</span>,<span class="at">taxa_list =</span> <span class="fu">c</span>(<span class="st">"Bacilli"</span>, <span class="st">"Cyanobacteriia"</span>, <span class="st">"Blastocatellia"</span>))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>p1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="sankey_tumor.jpg" class="img-fluid figure-img"></p>
+<p><img src="subset_sankey.jpg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </section>
 <section id="box-plot-to-check-real-differential-between-groups" class="level3">
 <h3 class="anchored" data-anchor-id="box-plot-to-check-real-differential-between-groups">2.2 Box plot to check real differential between groups</h3>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## function_box() will output a plot list of all the genus which include siginificant functions</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">function_box</span>(<span class="at">stratified_path =</span> <span class="st">"picrust2_out/KO_metagenome_out/pred_metagenome_contrib.tsv.gz"</span>, <span class="at">pathway_sdaa_result =</span> result, <span class="at">physeq =</span> ps1, <span class="at">group =</span> <span class="st">"group"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">tax2fun_box</span>(<span class="at">stratified_path =</span> <span class="st">"picrust2_out/KO_metagenome_out/pred_metagenome_contrib.tsv.gz"</span>, <span class="at">pathway_sdaa_result =</span> result, <span class="at">physeq =</span> ps1, <span class="at">group =</span> <span class="st">"group"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="tumor_list.png" class="img-fluid figure-img"></p>
@@ -267,7 +267,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="bar-plot-to-illustrate-log-fold-change-of-top-significant-functions-for-each-taxa">2.3 Bar plot to illustrate log fold change of top significant functions for each taxa</h3>
 <p>We provide <code>plot_pathway_logfc()</code> to help people generate figures for each genus which contains significant functions, for each genus there is a bar plot to show log fold change of some p-value top ranked functions. You could adjust how many top features you want to show in each plot by adjusting parameter <code>top_n</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## The default top_n is set to 15</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">plot_pathway_logfc</span>(<span class="at">pathway_sdaa_result =</span> result, <span class="at">top_n =</span> <span class="dv">15</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">tax2fun_logfc</span>(<span class="at">pathway_sdaa_result =</span> result, <span class="at">top_n =</span> <span class="dv">15</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(p3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -285,7 +285,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="dendrogram-for-connection-bewteen-taxa-and-function" class="level3">
 <h3 class="anchored" data-anchor-id="dendrogram-for-connection-bewteen-taxa-and-function">2.4 Dendrogram for connection bewteen taxa and function</h3>
 <p>We can also use a dendrogram plot to connect some genus we are insterested with top functions with highest log fold change.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">plot_function_dendrogram</span>(<span class="at">pathway_sdaa_result =</span> result)</span>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">tax2fun_dendro</span>(<span class="at">pathway_sdaa_result =</span> result)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>p4<span class="sc">$</span>plot</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -298,7 +298,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>If you are interested in some specific functions, you can also specify <code>taxa_list</code> and use <code>top_n_per_genus</code> to adjust how many functions included in each taxa.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>taxon_list <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Proteiniphilum"</span>, <span class="st">"Leuconostoc"</span>,<span class="st">"Actinobacteria"</span>,<span class="st">"Dialister"</span>,<span class="st">"Gordonia"</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">plot_genus_function_dendrogram</span>(<span class="at">pathway_sdaa_result =</span> result,<span class="at">taxa_list =</span> taxon_list, <span class="at">top_n_per_genus =</span> <span class="dv">10</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">tax2fun_dendro</span>(<span class="at">pathway_sdaa_result =</span> result,<span class="at">taxa_list =</span> taxon_list, <span class="at">top_n_per_genus =</span> <span class="dv">10</span>)</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>p4<span class="sc">$</span>plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
@@ -306,6 +306,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="dendrogram_subset.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
+<p>If you are interested in phylogenetic structure, we also provide a function to connect functions and taxa using phylogenetic tree.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">phy2fun_dendro</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">physeq              =</span> ps1,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">pathway_sdaa_result =</span> result1,   <span class="co"># names(result_list) are genera</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">level               =</span> <span class="st">"Genus"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">top_n_per_genus     =</span> <span class="dv">5</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="dendrogram_phy.png" class="img-fluid"></p>
+</section>
+<section id="global-analysis-taxa-to-functions" class="level3">
+<h3 class="anchored" data-anchor-id="global-analysis-taxa-to-functions">Global Analysis (Taxa to functions)</h3>
+<p>The stratified output of PICRUST2 is a three-dimensional data including samples, functions, and taxa. MicroFun R package can also provide statistical inference and visualization from taxa to functions</p>
+<p>First, we can still use <code>pathway_sdaa()</code> function by setting <code>direction="function"</code></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>result1 <span class="ot">&lt;-</span> <span class="fu">pathway_sdaa</span>(<span class="at">stratified_path =</span> <span class="st">"picrust2_out/KO_metagenome_out/pred_metagenome_contrib.tsv.gz"</span>, <span class="at">physeq =</span> ps1, <span class="at">group =</span> <span class="st">"group"</span>, <span class="at">direction =</span> <span class="st">"function"</span>, <span class="at">p.adjust.method =</span><span class="st">"BH"</span>,<span class="at">taxon_level=</span><span class="st">"Class"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The raw output is using KO function id.</p>
+<p><img src="result_fun.jpg" class="img-fluid"></p>
+<p>We can still use sankey diagram, box plot and bar plot to visualize the relationship between functions and taxa.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">fun2tax_sankey</span>(<span class="at">pathway_sdaa_result =</span> result, <span class="at">pathway =</span> <span class="st">"KO"</span>, <span class="at">node_neutral =</span> <span class="st">"green"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>p2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="fun2tax.jpg" class="img-fluid"></p>
 <p>If you want to use this data, please contact Dr.&nbsp;Liangliang Zhang via <a href="mailto:lxz716@case.edu" class="email">lxz716@case.edu</a> and cite the paper: <a href="https://www.cell.com/cell/fulltext/S0092-8674(19)30773-1">Tumor Microbiome Diversity and Composition Influence Pancreatic Cancer Outcomes</a>.</p>
 
 

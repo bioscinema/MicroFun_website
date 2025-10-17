@@ -202,21 +202,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="function_box" class="level4">
 <h4 class="anchored" data-anchor-id="function_box">2.2.2 function_box()</h4>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">function_box</span>(<span class="at">stratified_path =</span> <span class="st">"picrust2_out/KO_metagenome_out/pred_metagenome_contrib.tsv.gz"</span>, <span class="at">pathway_sdaa_result =</span> result, <span class="at">physeq =</span> ps1, <span class="at">group =</span> <span class="st">"group"</span>)</span>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">fun2tax_box</span>(<span class="at">stratified_path =</span> <span class="st">"picrust2_out/KO_metagenome_out/pred_metagenome_contrib.tsv.gz"</span>, <span class="at">pathway_sdaa_result =</span> result, <span class="at">physeq =</span> ps1, <span class="at">group =</span> <span class="st">"group"</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="do">## View the plot for first taxa</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>p2[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="plot_pathway_logfc" class="level4">
 <h4 class="anchored" data-anchor-id="plot_pathway_logfc">2.2.3 plot_pathway_logfc()</h4>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">plot_pathway_logfc</span>(<span class="at">pathway_sdaa_result =</span> result, <span class="at">top_n =</span> <span class="dv">15</span>)</span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">fun2tax_logfc</span>(<span class="at">pathway_sdaa_result =</span> result, <span class="at">top_n =</span> <span class="dv">15</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="do">## View the plot for first taxa</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>p3[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="plot_genus_function_dendrogram" class="level4">
 <h4 class="anchored" data-anchor-id="plot_genus_function_dendrogram">2.2.4 plot_genus_function_dendrogram()</h4>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">tax2fun_dendrogram</span>(<span class="at">pathway_sdaa_result =</span> result)</span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">tax2fun_dendro</span>(<span class="at">pathway_sdaa_result =</span> result)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>p4<span class="sc">$</span>plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 

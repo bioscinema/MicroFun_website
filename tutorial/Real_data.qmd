@@ -12,7 +12,7 @@ editor: visual
 
 We are using a tumor microbiome dataset from [Tumor Microbiome Diversity and Composition Influence Pancreatic Cancer Outcomes](https://www.cell.com/cell/fulltext/S0092-8674(19)30773-1). The paper explore the association bewteen microbiome and different survival status (long term survival (LTS) and short term survival (STS)) among pancreatic patient. We already have our stratified PICRUST2 output and phyloseq object. We are going to explore which functions are significant for each genus.
 
-```r
+``` r
 ## Load phyloseq object
 load("tumor_asv.RData")
 
@@ -20,56 +20,54 @@ load("tumor_asv.RData")
 ps1 <- subset_samples(ps, Cohort=="MDA")
 
 ## Differential analysis (pred_metagenome_contrib.tsv.gz is your original stratified output, ps1 is your phyloseq object, group is the response variable, the default taxonomy level is genus)
-result <- pathway_sdaa_v2(stratified_path = "picrust2_out/KO_metagenome_out/pred_metagenome_contrib.tsv.gz", physeq = ps1, group = "group", direction = "taxa", p.adjust.method = "BH")
+result <- pathway_sdaa_v2(stratified_path = "picrust2_out/KO_metagenome_out/pred_metagenome_contrib.tsv.gz", physeq = ps1, group = "group", direction = "taxa", p.adjust.method = "BH", taxon_level="Class")
 ```
 
-## 2. Global analysis
+## 2. Global analysis (Functions to taxa)
 
 ### 2.1 Sankey Diagram
 
-`Sankey_diagram()` visualizes flows from taxa to functions, with link width proportional to |logFC| and link color indicating differential direction (up/down).
+`Sankey_diagram()` visualizes flows from taxa to functions, with link width proportional to \|logFC\| and link color indicating differential direction (up/down). In the Sankey diagram, function IDs are grouped into higher-level pathway descriptions using the internal reference tables provided by the MicroFun R package.
 
-```r
-p1 <- sankey_diagram(result)
+``` r
+p1 <- p1 <- tax2fun_sankey(result1, node_neutral = "green")
 p1
 ```
 
-![](sankey_tumor.jpg){fig-align="center"}
+![](class_sankey.jpg){fig-align="center"}
 
-- Left nodes = genera you tested.
+-   Left nodes = genera you tested.
 
-- Right nodes = KEGG level-1 functional categories (Metabolism, Cellular Processes, Genetic Information Processing, Environmental Information Processing, Human Diseases, Organismal Systems).
+-   Right nodes = KEGG level-1 functional categories (Metabolism, Cellular Processes, Genetic Information Processing, Environmental Information Processing, Human Diseases, Organismal Systems).
 
-- Links = significant functions for a genus, aggregated to a higher level (width = how much that genus contributes to that category after aggregation).
+-   Links = significant functions for a genus, aggregated to a higher level (width = how much that genus contributes to that category after aggregation).
 
-- Colors (red/blue) usually encode group direction (e.g., higher in case vs control). If that’s your mapping, you can talk about directionality too.
+-   Colors (red/blue) usually encode group direction (e.g., higher in case vs control). If that's your mapping, you can talk about directionality too.
 
-From the plot, (i) the dominant KEGG level-1 categories by total aggregated flow—often led by Metabolism—and give each category’s percent share (especially useful if link colors encode groups); (ii) the top contributing genera per category (e.g., the top 3–5 by aggregated weight).
+From the plot, (i) the dominant KEGG level-1 categories by total aggregated flow---often led by Metabolism---and give each category's percent share (especially useful if link colors encode groups); (ii) the top contributing genera per category (e.g., the top 3--5 by aggregated weight).
 
 We also provide option `taxa_list` if you want to plot sankey diagram for some specific taxa
 
-```r
-## If you are interested specifically in g_Proteiniphilum and g_Leuconostoc
-taxon_list <- c("Proteiniphilum", "Leuconostoc")
-p1 <- tax2fun_sankey(result, taxa_list = taxon_list)
+``` r
+## If you are interested specifically in c__Bacilli, c__Cyanobacteriia, c__Blastocatellia
+p1 <- tax2fun_sankey(result1, node_neutral = "green",taxa_list = c("Bacilli", "Cyanobacteriia", "Blastocatellia"))
 p1
 ```
 
-![](sankey_tumor.jpg){fig-align="center"}
+![](subset_sankey.jpg){fig-align="center"}
 
 ### 2.2 Box plot to check real differential between groups
 
-```r
+``` r
 ## function_box() will output a plot list of all the genus which include siginificant functions
-p2 <- function_box(stratified_path = "picrust2_out/KO_metagenome_out/pred_metagenome_contrib.tsv.gz", pathway_sdaa_result = result, physeq = ps1, group = "group")
+p2 <- tax2fun_box(stratified_path = "picrust2_out/KO_metagenome_out/pred_metagenome_contrib.tsv.gz", pathway_sdaa_result = result, physeq = ps1, group = "group")
 ```
-
 
 ![](tumor_list.png){fig-align="center"}
 
 If you are interested in specific genus, you can plot:
 
-```r
+``` r
 # your targets (spell however; we'll fuzzy match too)
 targets <- c("Streptococcus", "Acinetobacter")
 
@@ -103,15 +101,15 @@ ggsave(filename = "tumor_function_box.png", bg="white", width = 10, height = 8, 
 
 We provide `plot_pathway_logfc()` to help people generate figures for each genus which contains significant functions, for each genus there is a bar plot to show log fold change of some p-value top ranked functions. You could adjust how many top features you want to show in each plot by adjusting parameter `top_n`.
 
-```r
+``` r
 ## The default top_n is set to 15
-p3 <- plot_pathway_logfc(pathway_sdaa_result = result, top_n = 15)
+p3 <- tax2fun_logfc(pathway_sdaa_result = result, top_n = 15)
 View(p3)
 ```
 
 ![](logfc_list.jpg){fig-align="center"}
 
-```r
+``` r
 ## Also, If you are interested in one specific taxa like Streptococcus
 p3[["Streptococcus]]
 ```
@@ -122,8 +120,8 @@ p3[["Streptococcus]]
 
 We can also use a dendrogram plot to connect some genus we are insterested with top functions with highest log fold change.
 
-```r
-p4 <- plot_function_dendrogram(pathway_sdaa_result = result)
+``` r
+p4 <- tax2fun_dendro(pathway_sdaa_result = result)
 
 p4$plot
 
@@ -134,14 +132,49 @@ ggsave(filename = "dendrogram.png", width = 16, height = 10, bg="white", dpi = 6
 
 If you are interested in some specific functions, you can also specify `taxa_list` and use `top_n_per_genus` to adjust how many functions included in each taxa.
 
-```r
+``` r
 taxon_list <- c("Proteiniphilum", "Leuconostoc","Actinobacteria","Dialister","Gordonia")
 
-p4 <- plot_genus_function_dendrogram(pathway_sdaa_result = result,taxa_list = taxon_list, top_n_per_genus = 10)
+p4 <- tax2fun_dendro(pathway_sdaa_result = result,taxa_list = taxon_list, top_n_per_genus = 10)
 
 p4$plot
 ```
 
 ![](dendrogram_subset.png){fig-align="center"}
 
-If you want to use this data, please contact Dr. Liangliang Zhang via <lxz716@case.edu> and cite the paper: [Tumor Microbiome Diversity and Composition Influence Pancreatic Cancer Outcomes](https://www.cell.com/cell/fulltext/S0092-8674(19)30773-1).
+If you are interested in phylogenetic structure, we also provide a function to connect functions and taxa using phylogenetic tree.
+
+```r
+p <- phy2fun_dendro(
+  physeq              = ps1,
+  pathway_sdaa_result = result1,   # names(result_list) are genera
+  level               = "Genus",
+  top_n_per_genus     = 5
+)
+p
+```
+
+![](dendrogram_phy.png)
+
+### Global Analysis (Taxa to functions)
+
+The stratified output of PICRUST2 is a three-dimensional data including samples, functions, and taxa. MicroFun R package can also provide statistical inference and visualization from taxa to functions
+
+First, we can still use `pathway_sdaa()` function by setting `direction="function"`
+```r
+result1 <- pathway_sdaa(stratified_path = "picrust2_out/KO_metagenome_out/pred_metagenome_contrib.tsv.gz", physeq = ps1, group = "group", direction = "function", p.adjust.method ="BH",taxon_level="Class")
+```
+The raw output is using KO function id.
+
+![](result_fun.jpg)
+
+We can still use sankey diagram, box plot and bar plot to visualize the relationship between functions and taxa.
+
+```r
+p2 <- fun2tax_sankey(pathway_sdaa_result = result, pathway = "KO", node_neutral = "green")
+p2
+```
+
+![](fun2tax.jpg)
+
+If you want to use this data, please contact Dr. Liangliang Zhang via [lxz716\@case.edu](mailto:lxz716@case.edu){.email} and cite the paper: [Tumor Microbiome Diversity and Composition Influence Pancreatic Cancer Outcomes](https://www.cell.com/cell/fulltext/S0092-8674(19)30773-1).

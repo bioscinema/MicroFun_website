@@ -15,7 +15,7 @@ format:
 
 ### 1.1 You also need to input representative sequencing file and feature table file which are the same as the standard PICRUST2.
 
-```bash
+``` bash
 picrust2_pipeline.py \
   -s rep_seqs.fna \
   -i feature-table.tsv \
@@ -24,7 +24,7 @@ picrust2_pipeline.py \
   --stratified
 ```
 
-They key files ending with "_contrib.tsv.gz" in each output folder are going to be used in later analysis.
+They key files ending with "\_contrib.tsv.gz" in each output folder are going to be used in later analysis.
 
 ## 2. Downstram analysis and visualization for stratified PICRUST2 output for MicrFun
 
@@ -32,7 +32,7 @@ They key files ending with "_contrib.tsv.gz" in each output folder are going to 
 
 In MicroFun package, `pathway_sdaa()` is used to do differential analysis, user can input the raw output with ".tsv.gz" file directly with their phyloseq object and target group. The `direction` parameter provide how they want to do test - they can test differential functions from every taxa or they can test differential taxa from every function.
 
-```r
+``` r
 result <- pathway_sdaa(stratified_path = "picrust2_out/KO_metagenome_out/pred_metagenome_contrib.tsv.gz", physeq = ps1, group = "group", direction = "taxa", p.adjust.method = "BH")
 ```
 
@@ -40,14 +40,14 @@ result <- pathway_sdaa(stratified_path = "picrust2_out/KO_metagenome_out/pred_me
 
 #### 2.2.1 sankey_diagram()
 
-```r
+``` r
 p1 <- tax2fun_snakey(result)
 ```
 
 #### 2.2.2 function_box()
 
-```r
-p2 <- function_box(stratified_path = "picrust2_out/KO_metagenome_out/pred_metagenome_contrib.tsv.gz", pathway_sdaa_result = result, physeq = ps1, group = "group")
+``` r
+p2 <- fun2tax_box(stratified_path = "picrust2_out/KO_metagenome_out/pred_metagenome_contrib.tsv.gz", pathway_sdaa_result = result, physeq = ps1, group = "group")
 
 ## View the plot for first taxa
 p2[[1]]
@@ -55,8 +55,8 @@ p2[[1]]
 
 #### 2.2.3 plot_pathway_logfc()
 
-```r
-p3 <- plot_pathway_logfc(pathway_sdaa_result = result, top_n = 15)
+``` r
+p3 <- fun2tax_logfc(pathway_sdaa_result = result, top_n = 15)
 
 ## View the plot for first taxa
 p3[[1]]
@@ -64,8 +64,8 @@ p3[[1]]
 
 #### 2.2.4 plot_genus_function_dendrogram()
 
-```r
-p4 <- tax2fun_dendrogram(pathway_sdaa_result = result)
+``` r
+p4 <- tax2fun_dendro(pathway_sdaa_result = result)
 
 p4$plot
 ```
