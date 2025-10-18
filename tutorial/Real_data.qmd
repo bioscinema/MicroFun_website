@@ -177,4 +177,13 @@ p2
 
 ![](fun2tax.jpg)
 
+Also, MicroFun R package also provide `fun2tax_box()` to help user visualize from functional ID with annoted higher level functional description.
+
+```r
+p2 <- fun2tax_box(stratified_path = "~/Downloads/pred_metagenome_contrib (3).tsv.gz", physeq = ps1, group = "group", pathway_sdaa_result = result_fun,taxon_level = "Class", pathway = "KO)
+p2[[1]]
+```
+
+![](fun2tax_box.jpg)
+
 If you want to use this data, please contact Dr. Liangliang Zhang via [lxz716\@case.edu](mailto:lxz716@case.edu){.email} and cite the paper: [Tumor Microbiome Diversity and Composition Influence Pancreatic Cancer Outcomes](https://www.cell.com/cell/fulltext/S0092-8674(19)30773-1).
