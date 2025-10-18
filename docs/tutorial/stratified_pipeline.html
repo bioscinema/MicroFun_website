@@ -196,26 +196,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="visualization-functions" class="level3">
 <h3 class="anchored" data-anchor-id="visualization-functions">2.2 Visualization functions</h3>
-<section id="sankey_diagram" class="level4">
-<h4 class="anchored" data-anchor-id="sankey_diagram">2.2.1 sankey_diagram()</h4>
+<section id="tax2fun_sankey-fun2tax_sankey" class="level4">
+<h4 class="anchored" data-anchor-id="tax2fun_sankey-fun2tax_sankey">2.2.1 tax2fun_sankey(), fun2tax_sankey(</h4>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">tax2fun_snakey</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="function_box" class="level4">
-<h4 class="anchored" data-anchor-id="function_box">2.2.2 function_box()</h4>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">fun2tax_box</span>(<span class="at">stratified_path =</span> <span class="st">"picrust2_out/KO_metagenome_out/pred_metagenome_contrib.tsv.gz"</span>, <span class="at">pathway_sdaa_result =</span> result, <span class="at">physeq =</span> ps1, <span class="at">group =</span> <span class="st">"group"</span>)</span>
+<section id="tax2fun_box-fun2tax_box" class="level4">
+<h4 class="anchored" data-anchor-id="tax2fun_box-fun2tax_box">2.2.2 tax2fun_box(), fun2tax_box()</h4>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">tax2fun_box</span>(<span class="at">stratified_path =</span> <span class="st">"picrust2_out/KO_metagenome_out/pred_metagenome_contrib.tsv.gz"</span>, <span class="at">pathway_sdaa_result =</span> result, <span class="at">physeq =</span> ps1, <span class="at">group =</span> <span class="st">"group"</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="do">## View the plot for first taxa</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>p2[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="plot_pathway_logfc" class="level4">
-<h4 class="anchored" data-anchor-id="plot_pathway_logfc">2.2.3 plot_pathway_logfc()</h4>
+<section id="tax2fun_logfc" class="level4">
+<h4 class="anchored" data-anchor-id="tax2fun_logfc">2.2.3 tax2fun_logfc()</h4>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">fun2tax_logfc</span>(<span class="at">pathway_sdaa_result =</span> result, <span class="at">top_n =</span> <span class="dv">15</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="do">## View the plot for first taxa</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>p3[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="plot_genus_function_dendrogram" class="level4">
-<h4 class="anchored" data-anchor-id="plot_genus_function_dendrogram">2.2.4 plot_genus_function_dendrogram()</h4>
+<section id="tax2fun_dendro" class="level4">
+<h4 class="anchored" data-anchor-id="tax2fun_dendro">2.2.4 tax2fun_dendro()</h4>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">tax2fun_dendro</span>(<span class="at">pathway_sdaa_result =</span> result)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>p4<span class="sc">$</span>plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
