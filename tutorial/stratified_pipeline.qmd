@@ -38,7 +38,7 @@ result <- pathway_sdaa(stratified_path = "picrust2_out/KO_metagenome_out/pred_me
 
 ### 2.2 Visualization functions
 
-#### 2.2.1 tax2fun_sankey(), fun2tax_sankey(
+#### 2.2.1 tax2fun_sankey(), fun2tax_sankey()
 
 ``` r
 p1 <- tax2fun_snakey(result)
